@@ -35,11 +35,13 @@ export default function SignUpPage() {
       const result = await signIn("credentials", {
         email,
         password,
-        callbackUrl: "/dashboard",
+        redirect: false,
       });
 
       if (result?.error) {
         setError("Failed to create account. Please try again.");
+      } else {
+        window.location.href = "/dashboard";
       }
     } catch {
       setError("Something went wrong. Please try again.");
