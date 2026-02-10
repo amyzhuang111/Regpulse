@@ -98,7 +98,7 @@ export default function SettingsPage() {
           {[
             { name: "Supabase", status: "Configure API keys in .env" },
             { name: "OpenAI", status: "Configure API key in .env" },
-            { name: "Vapi", status: "Configure API key in .env" },
+            { name: "ElevenLabs", status: "Configure API key in .env" },
           ].map((integration) => (
             <div
               key={integration.name}

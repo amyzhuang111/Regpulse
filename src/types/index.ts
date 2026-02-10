@@ -17,12 +17,12 @@ export interface Profile {
 export interface Call {
   id: string;
   user_id: string;
-  vapi_call_id: string | null;
   agent_name: string;
   customer_name: string | null;
   status: CallStatus;
   duration_seconds: number | null;
   transcript: string | null;
+  audio_storage_path: string | null;
   risk_score: number;
   started_at: string;
   ended_at: string | null;

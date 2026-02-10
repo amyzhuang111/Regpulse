@@ -1,8 +1,15 @@
 import OpenAI from "openai";
 
-export const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+let _openai: OpenAI | null = null;
+
+export function getOpenAI(): OpenAI {
+  if (!_openai) {
+    _openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY || "placeholder",
+    });
+  }
+  return _openai;
+}
 
 export const COMPLIANCE_SYSTEM_PROMPT = `You are an expert regulatory compliance analyst specializing in financial services. Your role is to analyze sales call transcripts and identify potential regulatory violations.
 
