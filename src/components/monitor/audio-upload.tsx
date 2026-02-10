@@ -48,8 +48,8 @@ export function AudioUpload() {
       setError("Please upload an audio file (MP3, WAV, M4A, WEBM, OGG, FLAC, or MP4)");
       return;
     }
-    if (f.size > 25 * 1024 * 1024) {
-      setError("File too large. Maximum size is 25MB.");
+    if (f.size > 4 * 1024 * 1024) {
+      setError("File too large. Maximum size is 4MB.");
       return;
     }
     setError(null);
@@ -84,8 +84,18 @@ export function AudioUpload() {
       });
 
       if (!res.ok) {
-        const data = await res.json();
-        throw new Error(data.error || "Upload failed");
+        let errorMsg = "Upload failed";
+        try {
+          const data = await res.json();
+          errorMsg = data.error || errorMsg;
+        } catch {
+          if (res.status === 413) {
+            errorMsg = "File too large for server. Try a smaller file (under 4MB).";
+          } else {
+            errorMsg = `Server error (${res.status}). Try a smaller file.`;
+          }
+        }
+        throw new Error(errorMsg);
       }
 
       setState("analyzing");
@@ -118,7 +128,7 @@ export function AudioUpload() {
           <div className="text-center">
             <p className="font-medium">Drop an audio file here or click to browse</p>
             <p className="text-sm text-muted-foreground">
-              MP3, WAV, M4A, WEBM, OGG, FLAC, MP4 — max 25MB
+              MP3, WAV, M4A, WEBM, OGG, FLAC, MP4 — max 4MB
             </p>
           </div>
           <input
