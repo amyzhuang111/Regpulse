@@ -21,12 +21,14 @@ export default function MonitorPage() {
   const [transcript, setTranscript] = useState<TranscriptLine[]>([]);
   const [violations, setViolations] = useState<typeof demoViolations>([]);
   const [elapsed, setElapsed] = useState(0);
+  const [runKey, setRunKey] = useState(0);
 
   const startDemo = useCallback(() => {
-    setIsRunning(true);
     setTranscript([]);
     setViolations([]);
     setElapsed(0);
+    setRunKey((k) => k + 1);
+    setIsRunning(true);
   }, []);
 
   const stopDemo = useCallback(() => {
@@ -44,7 +46,7 @@ export default function MonitorPage() {
     });
 
     return () => timers.forEach(clearTimeout);
-  }, [isRunning]);
+  }, [isRunning, runKey]);
 
   // Stream violations
   useEffect(() => {
@@ -57,14 +59,14 @@ export default function MonitorPage() {
     });
 
     return () => timers.forEach(clearTimeout);
-  }, [isRunning]);
+  }, [isRunning, runKey]);
 
   // Elapsed timer
   useEffect(() => {
     if (!isRunning) return;
     const interval = setInterval(() => setElapsed((e) => e + 1), 1000);
     return () => clearInterval(interval);
-  }, [isRunning]);
+  }, [isRunning, runKey]);
 
   const formatTime = (s: number) =>
     `${Math.floor(s / 60).toString().padStart(2, "0")}:${(s % 60).toString().padStart(2, "0")}`;
